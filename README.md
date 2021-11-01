@@ -1,9 +1,6 @@
 # Demonstração MongoDB + Rails API
 
-Este repositório contêm uma aplicação demonstração Ruby on Rails API usando Mongoid.
-
-It has been developed following the
-[Mongoid getting started guide with Rails](https://docs.mongodb.com/mongoid/master/tutorials/getting-started-rails/).
+Este repositório contêm uma aplicação demonstração Ruby on Rails API usando Mongodb.
 
 ## Implementação
 
@@ -17,67 +14,62 @@ Cada citação é composta por:
 - Link da página sobre o autor (author_about)
 - Etiquetas (tags)
 
-A aplicação trabalha com os seguintes recursos:
+A aplicação possui os seguintes recursos:
 
 - Ruby on Rails 6 API
 - MongoDB em nuvem Atlas funcionando como cache
-- Hospedada na nuvem AWS em instância EC2
-- Contêiner Docker
+- Serialização JSON
 
 A busca no site será realizada caso a citação e tag não estejam presentes no cache.
 Para a análise e coleta dos dados, foi utilizada a biblioteca Nokogiri.
-O retorno da consulta é através da serialização JSON.
+O retorno da consulta é através da serialização JSON nativa do Rails.
 
 O código está organizado assim:
 
-2 Modelos
+Controladoras
+    - quotes_controller.rb
 
-- author.rb
-- quote.rb
+Modelos
+    - author.rb
+    - quote.rb
 
-4 Métodos
+Métodos
+    - show
+    - search(tag)
+    - json(array)
+    - crawler(tag)
 
-- show
-- search(tag)
-- json(array)
-- crawler(tag)
+O banco de dados mongo está organizado assim:
 
-O banco mongo está organizado assim:
+Database:  quotestoscrape
 
-    database:  quotestoscrape
+Collections:
 
-    2 collections:
+    authors: {
+        _id: ObjectId("617f2d0601352d040f76fcaa")
+        name: "Albert Einstein"
+        about: "/author/Albert-Einstein"
+    }
 
-        authors: {
-            _id: ObjectId("617f2d0601352d040f76fcaa")
-            name: "Albert Einstein"
-            about: "/author/Albert-Einstein"
-        }
-
-        quotes: {
-            _id: ObjectId("617f41c201352d040f76fcae")
-            quote: "“The world as we have created it is a process of our thinking. It cann..."
-            tags: Array
-                0:"deep-thoughts"
-                1:"world"
-                2:"thinking"
-                3:"change"
-            author_id: ObjectId("617f2d0601352d040f76fcaa")
-        }
-
-
-
-Copy `config/mongoid.yml.sample` to `config/mongoid.yml` and adjust the
-settings within as needed:
+    quotes: {
+        _id: ObjectId("617f41c201352d040f76fcae")
+        quote: "“The world as we have created it is a process of our thinking. It cann..."
+        tags: Array
+            0:"deep-thoughts"
+            1:"world"
+            2:"thinking"
+            3:"change"
+        author_id: ObjectId("617f2d0601352d040f76fcaa")
+    }
 
 ## Como Usar
 
-Para rodar a aplicação, use o comando padrão do Rails (``rails s``,
+Para rodar a aplicação, clone-a, e use o comando padrão do Rails (``rails s``,
 ``rails c``).
 
-Acesse a aplicação pelo endpoint /quotes/, podendo:
+Acesse a aplicação pelo endpoint /quotes/, sendo:
 
-Pelo comando CURL:
+Pela linha de comando:
     
     curl http://localhost:3000/quotes/{SEARCH_TAG}
 
@@ -85,4 +77,4 @@ Pelo navegador:
     
     http://localhost:3000/quotes/{SEARCH_TAG}
     
-Troque {SEARCH_TAG} pela tag a buscar.
+Troque {SEARCH_TAG} pela tag de consulta.
