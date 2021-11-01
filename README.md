@@ -1,11 +1,31 @@
-# Sample Mongoid & Rails API Application
+# Demonstração MongoDB + Rails API
 
-This repository contains a sample Ruby on Rails API application using Mongoid.
+Este repositório contêm uma aplicação demonstração Ruby on Rails API usando Mongoid.
 
 It has been developed following the
 [Mongoid getting started guide with Rails](https://docs.mongodb.com/mongoid/master/tutorials/getting-started-rails/).
 
-## Configure
+## Implementação
+
+O objetivo é coletar dados da página https://quotes.toscrape.com/, onde existem
+citações realizadas por vários autores.
+
+Cada citação é composta por:
+
+- Citação (quote)
+- Autor (author)
+- Link da página sobre o autor (author_about)
+- Etiquetas (tags)
+
+A aplicação trabalha com os seguintes recursos:
+
+- Ruby on Rails 6 API
+- MongoDB em nuvem Atlas funcionando como cache
+- Hospedada na nuvem AWS em instância EC2
+- Contêiner Docker
+
+A busca no site será realizada caso a citação e tag não estejam presentes no cache.
+Foi usada ...
 
 Copy `config/mongoid.yml.sample` to `config/mongoid.yml` and adjust the
 settings within as needed:
@@ -17,14 +37,19 @@ URI to your cluster from the Atlas console.
 a deployment used over Internet such as Atlas and decreasing it for a
 local deployment.
 
-## Run
+## Como Usar
 
 To run the application, use the standard Rails commands (``rails s``,
 ``rails c``).
 
-Access the application endpoints:
+Acesse a aplicação pelo endpoint:
 
-    curl http://localhost:3000/posts
-    curl -d 'post[title]=hello&post[body]=world' http://localhost:3000/posts
-    curl -d 'comment[post_id]=5d9f5e4a026d7c4e4a71cbdf&comment[name]=Bob&comment[message]=Hi' http://localhost:3000/comments
-    curl 'http://localhost:3000/comments?post_id=5d9f5e4a026d7c4e4a71cbdf'
+Usando CLI pelo comando CURL:
+    
+    curl http://localhost:3000/quotes/{SEARCH_TAG}
+
+Pelo navegador:
+    
+    http://localhost:3000/quotes/{SEARCH_TAG}
+    
+Troque {SEARCH_TAG} pela tag a buscar.

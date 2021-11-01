@@ -20,7 +20,6 @@ class QuotesController < ApplicationController
       end
     end
     # Use cache, senão, crawlear página.
-    #n == 0 ? crawler(tag) : (render plain: JSON.generate(quotes))
     n == 0 ? crawler(tag) : json(quotes)
   end
 
@@ -41,6 +40,7 @@ class QuotesController < ApplicationController
     # Saber em qual dos 10 items da página estará
     count = 0
 
+    # JSON array
     quotes = Array.new
 
     # Para cada conjunto de tags encontradas (cada linha = campo 'tags' na página web)
@@ -69,12 +69,13 @@ class QuotesController < ApplicationController
           quote.nil?? Quote.create(quote: frase, tags: tg_ar = [tag], author_id: @autor.id) :
           quote.update(tags: quote.tags << tag)
 
+          # Serialização JSON
           quotes << { quote: frase, author: nome, author_about: link, tags: quote.tags.to_s }
-
         end
       end
       count+=1
     end
+    # Renderizar JSON
     json(quotes)
   end
 end
