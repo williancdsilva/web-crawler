@@ -25,26 +25,59 @@ A aplicação trabalha com os seguintes recursos:
 - Contêiner Docker
 
 A busca no site será realizada caso a citação e tag não estejam presentes no cache.
-Foi usada ...
+Para a análise e coleta dos dados, foi utilizada a biblioteca Nokogiri.
+O retorno da consulta é através da serialização JSON.
+
+O código está organizado assim:
+
+2 Modelos
+
+- author.rb
+- quote.rb
+
+4 Métodos
+
+- show
+- search(tag)
+- json(array)
+- crawler(tag)
+
+O banco mongo está organizado assim:
+
+    database:  quotestoscrape
+
+    2 collections:
+
+        authors: {
+            _id: ObjectId("617f2d0601352d040f76fcaa")
+            name: "Albert Einstein"
+            about: "/author/Albert-Einstein"
+        }
+
+        quotes: {
+            _id: ObjectId("617f41c201352d040f76fcae")
+            quote: "“The world as we have created it is a process of our thinking. It cann..."
+            tags: Array
+                0:"deep-thoughts"
+                1:"world"
+                2:"thinking"
+                3:"change"
+            author_id: ObjectId("617f2d0601352d040f76fcaa")
+        }
+
+
 
 Copy `config/mongoid.yml.sample` to `config/mongoid.yml` and adjust the
 settings within as needed:
 
-- If you are using a MongoDB Atlas cluster, remove the hosts and database
-sections from `config/mongoid.yml`, uncomment the URI section and paste the
-URI to your cluster from the Atlas console.
-- You may want to adjust the server selection timeout, increasing it for
-a deployment used over Internet such as Atlas and decreasing it for a
-local deployment.
-
 ## Como Usar
 
-To run the application, use the standard Rails commands (``rails s``,
+Para rodar a aplicação, use o comando padrão do Rails (``rails s``,
 ``rails c``).
 
-Acesse a aplicação pelo endpoint:
+Acesse a aplicação pelo endpoint /quotes/, podendo:
 
-Usando CLI pelo comando CURL:
+Pelo comando CURL:
     
     curl http://localhost:3000/quotes/{SEARCH_TAG}
 
