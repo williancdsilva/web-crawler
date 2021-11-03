@@ -62,15 +62,19 @@ class QuotesController < ApplicationController
           # Encontre ou salve o autor
           @autor = Author.find_or_create_by(name: nome, about: link)
 
-          # Procure se a citação já existe:
-          quote = Quote.find_by(quote: frase)
+          # Procure se a citação já existe
+          @quote = Quote.find_by(quote: frase)
 
-          # Se não, array novo. Se sim, nova tag.
-          quote.nil?? Quote.create(quote: frase, tags: tg_ar = [tag], author_id: @autor.id) :
-          quote.update(tags: quote.tags << tag)
+          # Se não existir, cria nova citação. Se sim, adiciona nova tag.
+          if @quote.nil?
+            @quote = Quote.new
+            @quote = Quote.create(quote: frase, tags: @quote.tags = [tag], author_id: @autor.id)
+          else
+            @quote.update(tags: @quote.tags << tag)
+          end
 
           # Serialização JSON
-          quotes << { quote: frase, author: nome, author_about: link, tags: quote.tags.to_s }
+          quotes << { quote: frase, author: nome, author_about: link, tags: @quote.tags.to_s }
         end
       end
       count+=1
