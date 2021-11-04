@@ -27,13 +27,16 @@ O retorno da consulta é através da serialização JSON nativa do Rails.
 O código está organizado assim:
 
 Controladoras
+
     - quotes_controller.rb
 
 Modelos
+
     - author.rb
     - quote.rb
 
 Métodos
+
     - show
     - search(tag)
     - json(array)
@@ -66,6 +69,9 @@ Collections:
 
 Para rodar a aplicação, clone-a, e use o comando padrão do Rails (``rails s``,
 ``rails c``).
+
+Para usar mongodb na nuvem, crie uma conta em https://cloud.mongodb.com/.
+Configure `mongoid.yml` como é sugerido pelo portal.
 
 Acesse a aplicação pelo endpoint /quotes/, sendo:
 
