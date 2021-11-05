@@ -1,11 +1,15 @@
-# Demonstração MongoDB + Rails API
+# Web Crawler Rails API + MongoDB + Nokogiri
 
 Este repositório contêm uma aplicação demonstração Ruby on Rails API usando Mongodb.
 
-## Implementação
+## Sobre
 
 O objetivo é coletar dados da página https://quotes.toscrape.com/, onde existem
 citações realizadas por vários autores.
+
+A busca no site será realizada caso a citação e tag não estejam presentes no cache.
+Cada página será analisada, e a tag de retorno será a que vier primeiro.
+O retorno da consulta é através da serialização JSON nativa do Rails.
 
 Cada citação é composta por:
 
@@ -17,12 +21,9 @@ Cada citação é composta por:
 A aplicação possui os seguintes recursos:
 
 - Ruby on Rails 6 API
+- Análise e coleta HTML usando a biblioteca Nokogiri
 - MongoDB em nuvem Atlas funcionando como cache
-- Serialização JSON
-
-A busca no site será realizada caso a citação e tag não estejam presentes no cache.
-Para a análise e coleta dos dados, foi utilizada a biblioteca Nokogiri.
-O retorno da consulta é através da serialização JSON nativa do Rails.
+- Serialização JSON (nativa)
 
 O código está organizado assim:
 
