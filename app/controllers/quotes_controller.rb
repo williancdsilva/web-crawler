@@ -4,38 +4,63 @@ class QuotesController < ApplicationController
   # GET /quotes/{tagname}
   def show
     tag = params[:tag]
-    search(tag)
+    cache_search(tag)
   end
 
-  def search(tag)
-    # Quando usar cache ou crawler (padrão: crawler)
+  def cache_search(tag)
+    # Quando usar cache ou coleta (padrão: coleta)
     n = 0
     quotes = Array.new
     # Buscar tag no cache
     Quote.each do |q|
       if q.tags.include?(tag)
         a = Author.find(q.author_id)
+        # Serialização JSON
         quotes << { quote: q.quote, author: a.name, author_about: a.about, tags: q.tags.to_s }
         n+=1
       end
     end
-    # Use cache, senão, crawlear página.
-    n == 0 ? crawler(tag) : json(quotes)
+    # Coletar dados se não encontrou tag ou renderiza cache.
+    n == 0 ? tag_page(tag) : json(quotes)
   end
 
   def json(array)
     render plain: JSON.generate(array)
   end
 
-  private
+  # Procura tag no portal
+  def tag_page(tag)
 
-  def crawler(tag)
-    uri = "http://quotes.toscrape.com/"
-    doc = Nokogiri::HTML(URI.open(uri))
+    uri = "http://quotes.toscrape.com"
 
-    # Crawler tags
-    tags = doc.css(".tags .keywords")
-    result = tags.map { |t| t.attributes["content"].value }
+    # Procura a tag em cada página
+    loop do
+      
+      doc = Nokogiri::HTML(URI.open(uri))
+
+      # Coleta as tags da página
+      tags = doc.css(".tags .keywords")
+      result = tags.map { |t| t.attributes["content"].value }
+
+      # Acha a próxima página
+      if result.any?(/#{tag}/)
+        crawler(tag, result, doc)
+        break
+      else
+        # Se não existir o botão "next", fim da busca!
+        if doc.search("nav .pager .next").empty?
+          render plain: "Tag não existe no site."
+          break
+        else
+          # Próxima página
+          next_page = doc.css(".pager .next a").attribute("href").text
+          uri = "http://quotes.toscrape.com" + next_page
+        end
+      end
+    end
+  end
+
+  def crawler(tag, result, doc)
 
     # Saber em qual dos 10 items da página estará
     count = 0
@@ -52,11 +77,11 @@ class QuotesController < ApplicationController
         # A tag encontrada é igual a recebida via GET /quotes/{tagname} ?
         if a.casecmp?(tag)
 
-          # Crawlear nome do autor
+          # Coletar nome do autor
           nome = doc.css(".author")[count].text.strip
-          # Crawlear quote do autor
+          # Coletar quote do autor
           frase = doc.css(".quote .text")[count].text.strip
-          # Crawlear link do autor
+          # Coletar link do autor
           link = doc.css(".quote")[count].children[3].children[3].attributes["href"].value
 
           # Encontre ou salve o autor
