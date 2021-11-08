@@ -10,6 +10,7 @@ citações realizadas por vários autores.
 A busca no site será realizada caso a citação e tag não estejam presentes no cache.
 Cada página será analisada, e a tag de retorno será a que vier primeiro.
 O retorno da consulta é através da serialização JSON nativa do Rails.
+É necessário token de acesso na requisição para usar a API.
 
 Cada citação é composta por:
 
@@ -23,6 +24,7 @@ A aplicação possui os seguintes recursos:
 - Ruby on Rails 6 API
 - Análise e coleta HTML usando a biblioteca Nokogiri
 - MongoDB em nuvem Atlas funcionando como cache
+- Acesso por token
 - Serialização JSON (nativa)
 
 O código está organizado assim:
@@ -78,10 +80,7 @@ Acesse a aplicação pelo endpoint /quotes/, sendo:
 
 Pela linha de comando:
     
-    curl http://localhost:3000/quotes/{SEARCH_TAG}
-
-Pelo navegador:
-    
-    http://localhost:3000/quotes/{SEARCH_TAG}
+    curl -H "Authorization: Token token=secret" \
+        http://localhost:3000/quotes/{SEARCH_TAG}
     
 Troque {SEARCH_TAG} pela tag de consulta.
