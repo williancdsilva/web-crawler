@@ -104,7 +104,7 @@ class QuotesController < ApplicationController
           end
 
           # Serialização JSON
-          quotes << { quote: frase, author: nome, author_about: link, tags: @quote.tags.to_s }
+          quotes << { quote: frase, author: nome, author_about: link, tags: @quote.tags }
         end
       end
       count+=1
