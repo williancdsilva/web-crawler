@@ -40,10 +40,11 @@ Modelos
 
 Métodos
 
-    - show
-    - search(tag)
-    - json(array)
-    - crawler(tag)
+    - show, recebe a requisição
+    - cache_search, busca tag no cache
+    - json, serializa retorno
+    - tag_page, busca tag no portal
+    - crawler, extrai dados do portal
 
 O banco de dados mongo está organizado assim:
 
