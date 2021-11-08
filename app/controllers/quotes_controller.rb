@@ -1,6 +1,11 @@
 class QuotesController < ApplicationController
+  include ActionController::HttpAuthentication::Token::ControllerMethods
   require "open-uri"
-  
+
+  TOKEN = "secret"
+
+  before_action :authenticate
+
   # GET /quotes/{tagname}
   def show
     tag = params[:tag]
@@ -106,5 +111,13 @@ class QuotesController < ApplicationController
     end
     # Renderizar JSON
     json(quotes)
+  end
+  
+  private
+  
+  def authenticate
+    authenticate_or_request_with_http_token do |token, options|
+      ActiveSupport::SecurityUtils.secure_compare(token, TOKEN)
+    end
   end
 end
