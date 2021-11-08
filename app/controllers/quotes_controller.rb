@@ -21,7 +21,7 @@ class QuotesController < ApplicationController
       if q.tags.include?(tag)
         a = Author.find(q.author_id)
         # Serialização JSON
-        quotes << { quote: q.quote, author: a.name, author_about: a.about, tags: q.tags.to_s }
+        quotes << { quote: q.quote, author: a.name, author_about: a.about, tags: q.tags }
         n+=1
       end
     end
